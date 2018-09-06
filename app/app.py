@@ -5,7 +5,6 @@ import fastText
 from fastText import load_model
 import json
 import sys
-from wtforms import TextField, Form
 import os
 
 STATIC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
@@ -16,15 +15,15 @@ model = None
 
 def load_fasttext_model():
     global model
-    mf = f'{STATIC_PATH}/model.bin' 
+    mf = f'{STATIC_PATH}/model.bin'
     try:
         model = load_model(mf)
     except IOError as e:
-        print("I/O error({0}): {1}".format(e.errno, e.strerror))
+        print(f'I/O error {e.errno},{e.strerror}')
     except ValueError as e:
-        print("Value error({0}): {1}".format(e.errno, e.strerror))
+        print(f'Value error {e}')
     except:
-        print("Unexpected error:", sys.exc_info()[0])
+        print(f'Unexpected error: {sys.exc_info()[0]}')
   
 
 @app.route('/', methods=['GET', 'POST'])
@@ -51,5 +50,5 @@ def api():
 
 if __name__ == '__main__':
     load_fasttext_model()
-    app.run(host='0.0.0.0', port=5606, debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
 
