@@ -1,0 +1,24 @@
+sudo: true
+dist: trusty
+
+env:
+  global:
+    - PROJECT=nav-datalab
+    - IMAGE=ai-lab-nace-poc
+    - INSTANCE_NAME=ai-lab-nace-poc #ai-lab-nace-poc-1
+
+jobs:
+  include:
+    - stage: build docker image
+      script:
+      - docker build -t ${IMAGE} .
+      - docker images
+      - docker tag ${IMAGE} gcr.io/${PROJECT}/${IMAGE}:${TRAVIS_COMMIT}
+    - stage: push docker image to gcp
+      script:
+      - gcloud docker -- push gcr.io/${PROJECT}/${IMAGE}:${TRAVIS_COMMIT}
+    - stage: deploy new docker image to gcloud instance
+      script:
+      - gcloud compute instances stop ${INSTANCE_NAME}
+      - gcloud beta compute instances update-container ${INSTANCE_NAME} --container-image gcr.io/${PROJECT}/${IMAGE}:${TRAVIS_COMMIT}
+      - gcloud compute instances start ${INSTANCE_NAME}
