@@ -1,26 +1,41 @@
 sudo: true
-dist: trusty
+# Cache Gcloud SDK between commands
+cache:
+  directories:
+    - "$HOME/google-cloud-sdk/"
+#services:
+#  - docker
 env:
   global:
-  - PROJECT=nav-datalab
-  - IMAGE=ai-lab-nace-poc
-  - INSTANCE_NAME=ai-lab-nace-poc
+  - PROJECT="nav-datalab"
+  - IMAGE="ai-lab-nace-poc"
+  - INSTANCE_NAME="ai-lab-nace-poc"
+  - RELEASE_VERSION="$(git fetch --unshallow || true && git rev-list --count $TRAVIS_COMMIT)"
 jobs:
   include:
+  - stage: authentication
+    script:
+    - openssl aes-256-cbc -K $encrypted_f3ad65be14c4_key -iv $encrypted_f3ad65be14c4_iv -in
+      credentials.tar.gz.enc -out credentials.tar.gz -d
+    # If the SDK is not already cached, download it and unpack it
+    - if [ ! -d ${HOME}/google-cloud-sdk ]; then
+        curl https://sdk.cloud.google.com | bash;
+      fi
+    - tar -xzf credentials.tar.gz
+    - gcloud auth activate-service-account --key-file client-secret.json
   - stage: build docker image
     script:
     - docker build -t ${IMAGE} .
     - docker images
-    - docker tag ${IMAGE} gcr.io/${PROJECT}/${IMAGE}:${TRAVIS_COMMIT}
+    - docker tag ${IMAGE} gcr.io/${PROJECT}/${IMAGE}:${RELEASE_VERSION}
   - stage: push docker image to gcp
     script:
-    - gcloud docker -- push gcr.io/${PROJECT}/${IMAGE}:${TRAVIS_COMMIT}
+    - gcloud config set project ${PROJECT}
+    - gcloud docker -- push gcr.io/${PROJECT}/${IMAGE}:${RELEASE_VERSION}
   - stage: deploy new docker image to gcloud instance
     script:
     - gcloud compute instances stop ${INSTANCE_NAME}
     - gcloud beta compute instances update-container ${INSTANCE_NAME} --container-image
-      gcr.io/${PROJECT}/${IMAGE}:${TRAVIS_COMMIT}
+      gcr.io/${PROJECT}/${IMAGE}:${RELEASE_VERSION}
     - gcloud compute instances start ${INSTANCE_NAME}
-before_install:
-- openssl aes-256-cbc -K $encrypted_f3ad65be14c4_key -iv $encrypted_f3ad65be14c4_iv
-  -in credentials.tar.gz.enc -out credentials.tar.gz -d
+
