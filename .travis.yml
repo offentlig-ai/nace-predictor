@@ -22,16 +22,16 @@ jobs:
     - docker build -t ${IMAGE_NAME} .
     - docker images
     - docker tag ${IMAGE_NAME} gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${RELEASE_VERSION}
+    - ls -a
+    - openssl aes-256-cbc -K $encrypted_23b53ae62afc_key -iv $encrypted_23b53ae62afc_iv -in client_secret.json.enc -out client_secret.json -d
+    - ls -a
+    - gcloud auth activate-service-account ${SERVICE_ACCOUNT} --key-file client-secret.json --project=${PROJECT_NAME}
     - gcloud docker -- push gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${RELEASE_VERSION}
     - gcloud compute ssh ${INSTANCE_NAME} --zone ${ZONE_TAG} --command "docker rmi
       \$(docker images | grep 'gcr.io/${PROJECT_NAME}/${IMAGE_NAME}' | awk '{print
       \$3}') | true"
   - stage: deploy docker image to gcloud VM instance
     script:
-    - ls -a
-    - openssl aes-256-cbc -K $encrypted_23b53ae62afc_key -iv $encrypted_23b53ae62afc_iv -in client_secret.json.enc -out client_secret.json -d
-    - ls -a
-    - gcloud auth activate-service-account ${SERVICE_ACCOUNT} --key-file client-secret.json --project=${PROJECT_NAME}
     - gcloud compute instances stop ${INSTANCE_NAME} --zone ${ZONE_TAG}
     - gcloud beta compute instances update-container ${INSTANCE_NAME} --container-image
       gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${RELEASE_VERSION} --zone ${ZONE_TAG}
