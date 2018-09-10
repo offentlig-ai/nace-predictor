@@ -21,7 +21,7 @@ before_install:
   # Download and unpack gcloud SDK if not already cached
   - if [ ! -d ${HOME}/google-cloud-sdk ]; then curl https://sdk.cloud.google.com | bash; fi
   # Decrypt gcloud service account key
-  - openssl aes-256-cbc -K $encrypted_23b53ae62afc_key -iv $encrypted_23b53ae62afc_iv -in client_secret.json.enc -out client_secret.json -d 
+  - openssl aes-256-cbc -K $encrypted_23b53ae62afc_key -iv $encrypted_23b53ae62afc_iv -in client_secret.json.enc -out client_secret.json -d
   # Autohorize access to gcloud platform using service account key
   - gcloud auth activate-service-account ${SERVICE_ACCOUNT} --key-file client-secret.json --project=${PROJECT_NAME}
 
