@@ -14,12 +14,11 @@ env:
   - SERVICE_ACCOUNT=travis-ci@${PROJECT_NAME}.iam.gserviceaccount.com
   - ZONE_TAG=us-east1-b
 before_install:
-- openssl aes-256-cbc -K $encrypted_23b53ae62afc_key -iv $encrypted_23b53ae62afc_iv
-  -in client_secret.json.enc -out client_secret.json -d
-- if [ ! -d ${HOME}/google-cloud-sdk ]; then curl https://sdk.cloud.google.com | bash;
-  fi
-- gcloud auth activate-service-account ${SERVICE_ACCOUNT} --key-file client-secret.json
-  --project=${PROJECT_NAME}
+  - if [ ! -d ${HOME}/google-cloud-sdk ]; then curl https://sdk.cloud.google.com | bash; fi
+  - ls -a
+  - openssl aes-256-cbc -K $encrypted_23b53ae62afc_key -iv $encrypted_23b53ae62afc_iv -in client_secret.json.enc -out client_secret.json -d
+  - ls -a
+  - gcloud auth activate-service-account ${SERVICE_ACCOUNT} --key-file client-secret.json --project=${PROJECT_NAME}
 jobs:
   include:
   - stage: build and push docker image to gcloud
