@@ -11,8 +11,8 @@ git:
 env:
   global:
   - PROJECT_NAME=nav-datalab
-  - IMAGE_NAME=gcloud-test
-  - INSTANCE_NAME=ai-lab-nace-poc
+  - IMAGE_NAME=ai-lab-nace-poc
+  - INSTANCE_NAME=ai-lab-nace-poc-1
   - RELEASE_VERSION=$(git rev-list --count master)
   - SERVICE_ACCOUNT=travis-ci@${PROJECT_NAME}.iam.gserviceaccount.com
   - ZONE_TAG=us-east1-b
