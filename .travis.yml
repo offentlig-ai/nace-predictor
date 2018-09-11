@@ -34,8 +34,8 @@ jobs:
   - stage: build REACT application
     script:
     - cd app/static
+    - npm install
     - npm run build
-    - cd ../..
   - stage: build and push docker image to gcloud
     script:
     # Build and tag docker image
