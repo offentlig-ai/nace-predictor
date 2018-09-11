@@ -31,14 +31,15 @@ before_install:
 
 jobs:
   include:
-  - stage: build REACT application
-    script:
-    - cd app/static/
-    - npm install
-    - npm run build
   - stage: build and push docker image to gcloud
     script:
     # Build and tag docker image
+    - ls -a
+    - cd app/static/
+    - npm install
+    - npm run build
+    - ls -a
+    - cd ../..
     - docker build -t ${IMAGE_NAME} .
     - docker images
     - docker tag ${IMAGE_NAME} gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${RELEASE_VERSION}
@@ -55,3 +56,5 @@ jobs:
     - gcloud beta compute instances update-container ${INSTANCE_NAME} --container-image
       gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${RELEASE_VERSION} --zone ${ZONE_TAG}
     - gcloud compute instances start ${INSTANCE_NAME} --zone ${ZONE_TAG}
+    - cd app/static
+    - ls -a
