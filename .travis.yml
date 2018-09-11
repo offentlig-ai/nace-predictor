@@ -1,6 +1,10 @@
 dist: trusty
 sudo: required
 
+language: node_js
+node_js:
+  - "stable"
+
 cache:
   directories:
   - "$HOME/google-cloud-sdk/"
@@ -27,6 +31,11 @@ before_install:
 
 jobs:
   include:
+  - stage: build REACT application
+    script:
+    - cd app/static
+    - npm run build
+    - cd ../..
   - stage: build and push docker image to gcloud
     script:
     # Build and tag docker image
