@@ -29,14 +29,13 @@ before_install:
   # Autohorize access to gcloud platform using service account key
   - gcloud auth activate-service-account ${SERVICE_ACCOUNT} --key-file client_secret.json --project=${PROJECT_NAME}
 
-install:
-  - (cd app/static/ && npm install)
-
 jobs:
   include:
   - stage: build REACT application
     script:
-    - (cd app/static/ && npm run build)
+    - cd app/static/
+    - npm install
+    - npm run build
   - stage: build and push docker image to gcloud
     script:
     # Build and tag docker image
