@@ -1,10 +1,6 @@
 dist: trusty
 sudo: required
 
-language: node_js
-node_js:
-  - "stable"
-
 cache:
   directories:
   - "$HOME/google-cloud-sdk/"
@@ -31,20 +27,19 @@ before_install:
 
 jobs:
   include:
-  - stage: build and push docker image to gcloud
+  - stage: build react app and docker image and push image to gcloud
     script:
+    # Build react app
+    - chmod +x buildReactApp.sh
+    - ./scripts/buildReactApp.sh
     # Build and tag docker image
-    - ls -a
-    - cd app/static/
-    - npm install
-    - npm run build
-    - ls -a
-    - cd ../..
     - docker build -t ${IMAGE_NAME} .
     - docker images
     - docker tag ${IMAGE_NAME} gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${RELEASE_VERSION}
     # Push docker image to gcloud storage
     - gcloud docker -- push gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${RELEASE_VERSION}
+  - stage: Remove older docker images from VM instance
+    script:
     # Remove older docker images to conserve VM instance memory
     - gcloud compute ssh ${INSTANCE_NAME} --zone ${ZONE_TAG} --command "docker rmi
       \$(docker images | grep 'gcr.io/${PROJECT_NAME}/${IMAGE_NAME}' | awk '{print
@@ -56,5 +51,3 @@ jobs:
     - gcloud beta compute instances update-container ${INSTANCE_NAME} --container-image
       gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${RELEASE_VERSION} --zone ${ZONE_TAG}
     - gcloud compute instances start ${INSTANCE_NAME} --zone ${ZONE_TAG}
-    - cd app/static
-    - ls -a

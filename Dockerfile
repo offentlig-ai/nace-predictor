@@ -11,14 +11,14 @@ RUN curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz > /tm
 
 # Installing the gcloud package
 RUN mkdir -p /usr/local/gcloud \
-  && tar -C /usr/local/gcloud -xvf /tmp/google-cloud-sdk.tar.gz \
-  && /usr/local/gcloud/google-cloud-sdk/install.sh
+  && tar -C /usr/local/gcloud -xvf /tmp/google-cloud-sdk.tar.gz > /dev/null \
+  && /usr/local/gcloud/google-cloud-sdk/install.sh > /dev/null
 
 # Adding the package path to local
 ENV PATH $PATH:/usr/local/gcloud/google-cloud-sdk/bin
 
 COPY ./app /app
-COPY ./dockerEntryPoint.sh /
+COPY ./scripts/dockerEntryPoint.sh /
 
 WORKDIR /app
 

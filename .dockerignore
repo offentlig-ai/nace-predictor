@@ -1,0 +1,10 @@
+.gitignore
+.travis.yml
+Dockerfile
+CODEOWNERS
+LICENSE.md
+README.md
+client_secret.json.enc
+screenshot.png
+notebooks
+scripts/buildReactApp.sh
