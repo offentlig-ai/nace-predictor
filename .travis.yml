@@ -30,7 +30,7 @@ jobs:
   - stage: build react app and docker image and push image to gcloud
     script:
     # Build react app
-    - chmod +x buildReactApp.sh
+    - chmod +x ./scripts/buildReactApp.sh
     - ./scripts/buildReactApp.sh
     # Build and tag docker image
     - docker build -t ${IMAGE_NAME} .
