@@ -1,0 +1,20 @@
+FROM python:3
+
+COPY fastText /tmp/fastText
+COPY pip.conf /root/.pip/pip.conf
+COPY ca-bundle.crt /usr/local/share/ca-certificates/ca-bundle.crt
+
+RUN cd /tmp/fastText && \
+  pip install . && \
+  rm -rf /tmp/fastText && \
+  cd /
+
+COPY app /app
+
+ADD https://storage.googleapis.com/ai-lab-modeller/nace_model.bin /app/static/model.bin
+
+WORKDIR /app
+
+RUN pip install -r requirements.txt
+
+CMD ["python", "app.py"]

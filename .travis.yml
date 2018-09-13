@@ -33,7 +33,7 @@ jobs:
     - chmod +x ./scripts/buildReactApp.sh
     - ./scripts/buildReactApp.sh
     # Build and tag docker image
-    - docker build -t ${IMAGE_NAME} .
+    - docker build -t ${IMAGE_NAME} -f Dockerfile.travis .
     - docker images
     - docker tag ${IMAGE_NAME} gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${RELEASE_VERSION}
     # Push docker image to gcloud storage
