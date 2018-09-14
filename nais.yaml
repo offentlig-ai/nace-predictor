@@ -1,2 +1,3 @@
 image: repo.adeo.no:5443/ai-lab-nace-poc
 team: ailab
+port: 80
