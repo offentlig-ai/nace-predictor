@@ -31,6 +31,16 @@ def react():
     return render_template('index.html')
 
 
+@app.route('/isReady', methods=['GET'])
+def isReady():
+    return "OK"
+
+
+@app.route('/isAlive', methods=['GET'])
+def isAlive():
+    return "OK"
+
+
 @app.route('/api', methods=['GET'])
 def api():
     if 'q' in request.args:
