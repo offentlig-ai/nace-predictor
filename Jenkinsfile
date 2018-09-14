@@ -19,8 +19,8 @@ node {
     }
 
     stage('Build react app') {
-        sh "chmod +x buildReactApp.sh"
-        sh "./buildReactApp.sh"
+        sh "chmod +x scripts/buildReactApp.sh"
+        sh "./scripts/buildReactApp.sh"
     }
 
     stage('Build docker image') {
