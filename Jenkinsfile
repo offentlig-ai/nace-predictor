@@ -29,7 +29,7 @@ node {
 
     stage('Push docker image') {
         docker.withRegistry('https://repo.adeo.no:5443', 'docker-credentials') {
-            app.tag("${env.BUILD_ID}")
+            app.push("${env.BUILD_ID}")
         }
     }
 
