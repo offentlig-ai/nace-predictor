@@ -2,12 +2,12 @@ FROM navikt/python-fasttext:0.8.22
 
 COPY ca-bundle.crt /usr/local/share/ca-certificates/ca-bundle.crt
 
-COPY app /app
-
 ADD https://storage.googleapis.com/ai-lab-modeller/nace_model.bin /app/static/model.bin
+
+COPY app /app
 
 WORKDIR /app
 
-RUN pip install --cert /usr/local/share/ca-certificates/ca-bundle.crt -r requirements.txt
+RUN pip install --proxy http://webproxy-utvikler.nav.no:8088 --cert /usr/local/share/ca-certificates/ca-bundle.crt -r requirements.txt
 
 CMD ["python", "app.py"]
