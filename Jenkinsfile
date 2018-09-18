@@ -16,7 +16,7 @@ node {
 
     stage('Copy certificate bundle and aws credentials') {
         sh "cp /etc/ssl/certs/ca-bundle.crt ca-bundle.crt"
-        sh "cp /home/deployer/.aws/credentials aws-credentials"
+        sh "cp /var/lib/jenkins/.awg/credentials aws-credentials"
     }
 
     stage('Build react app') {
