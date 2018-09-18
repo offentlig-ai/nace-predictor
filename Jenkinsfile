@@ -14,8 +14,9 @@ node {
         checkout scm
     }
 
-    stage('Copy certificate bundle') {
+    stage('Copy certificate bundle and aws credentials') {
         sh "cp /etc/ssl/certs/ca-bundle.crt ca-bundle.crt"
+        sh "cp /home/deployer/.aws/credentials aws-credentials"
     }
 
     stage('Build react app') {
