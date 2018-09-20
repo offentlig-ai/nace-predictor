@@ -1,4 +1,4 @@
-image: repo.adeo.no:5443/ai-lab-yrkeskode-api
+image: repo.adeo.no:5443/yrkeskode-api
 team: ailab
 port: 80
 resources: # Optional. See: http://kubernetes.io/docs/user-guide/compute-resources/
