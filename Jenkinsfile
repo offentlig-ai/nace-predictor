@@ -29,7 +29,7 @@ node {
     }
 
     stage('Upload nais.yaml to nexus server') {
-        sh "curl -s -S --upload-file nais.yaml https://repo.adeo.no/repository/raw/nais/${app_name}/${env.BUILD_ID}/nais.yaml"
+        sh "curl -s -S --upload-file nais.yaml ${yaml_path}"
     }
 
     stage('Push docker image') {
