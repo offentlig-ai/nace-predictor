@@ -8,6 +8,8 @@ resources: # Optional. See: http://kubernetes.io/docs/user-guide/compute-resourc
   requests: # App is guaranteed the requested resources and  will be scheduled on nodes with at least this amount of resources available
     cpu: 500m
     memory: 2256Mi
+ingress:
+  enabled: true
 replicas: # set min = max to disable autoscaling
   min: 1 # minimum number of replicas
   max: 1 # maximum number of replicas
