@@ -4,7 +4,7 @@ node {
     def app_name = 'ai-lab-nace-poc'
     def namespace = 'ai-lab-nace-poc'
     def cluster = 'oera-q.local'
-    def yaml_path = 'https://repo.adeo.no/repository/raw/nais/\${app_name}/\${env.BUILD_ID}/nais.yaml'
+    def yaml_path = "https://repo.adeo.no/repository/raw/nais/${app_name}/${env.BUILD_ID}/nais.yaml"
 
     stage('Clean workspace') {
         cleanWs()
