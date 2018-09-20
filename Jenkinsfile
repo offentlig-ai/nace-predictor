@@ -4,7 +4,7 @@ node {
     def app_name = 'ai-lab-nace-poc'
     def namespace = 'ai-lab-nace-poc'
     def cluster = 'oera-q.local'
-    def yaml_path = 'https://raw.githubusercontent.com/navikt/ai-lab-nace-poc/master/nais.yaml'
+    def yaml_path = 'https://repo.adeo.no/repository/raw/nais/${app_name}/${env.BUILD_ID}/nais.yaml'
 
     stage('Clean workspace') {
         cleanWs()
@@ -26,6 +26,10 @@ node {
 
     stage('Build docker image') {
         app = docker.build("${app_name}", "-f Dockerfile.jenkins .")
+    }
+
+    stage('Upload nais.yaml to nexus server') {
+        curl -s -S --upload-file nais.yaml https://repo.adeo.no/repository/raw/nais/${app_name}/${env.BUILD_ID}/nais.yaml
     }
 
     stage('Push docker image') {
