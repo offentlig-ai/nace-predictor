@@ -64,7 +64,12 @@ export default class Search extends React.Component {
             return o.nace === item.nace;
         });
 
+        if (entry.length == 0 || !('tekst' in entry[0]) ) {
+            return item.nace
+        }
+   
         return item.nace + ': ' + entry[0].tekst;
+  
     }
 
     render() {
