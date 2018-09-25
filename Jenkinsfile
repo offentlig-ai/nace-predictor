@@ -33,7 +33,7 @@ node {
     }
 
     stage('Push docker image') {
-        docker.withRegistry('https://repo.adeo.no:5443', 'docker-credentials') {
+        docker.withRegistry('https://repo.adeo.no:5443', 'nexus-credentials') {
             app.push("${env.BUILD_ID}")
         }
     }
