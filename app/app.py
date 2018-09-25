@@ -43,13 +43,14 @@ def isAlive():
 
 @app.route('/api', methods=['GET'])
 def api():
-    errormsg = 'Feil: ingen tekst sent.'  
     if 'q' in request.args:
         query = request.args['q']
         if not isinstance(query, str):
-          return errormsg 
+            return
+        if len(query) < 3:
+            return
     else:
-        return errormsg
+        return
 
     if model is None:      
         load_fasttext_model()
