@@ -48,6 +48,6 @@ node {
         echo "Build failed"
         throw e
     } finally {
-        sh "docker rmi -f \$(docker images -q)"
+        sh "docker rmi -f \$(docker images | grep 'repo.adeo.no:5443/${app_name}' | awk '{print \$3}') | true"
     }
 }
