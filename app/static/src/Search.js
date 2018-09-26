@@ -16,7 +16,7 @@ export default class Search extends React.Component {
     _autocompleteCache = {};
 
     componentWillMount() {
-        import('./nace_beskrivelse.json').then(
+        import('./item2tekst.json').then(
           res => this.setState({ nace: res })
         );
     }
@@ -35,31 +35,37 @@ export default class Search extends React.Component {
     }
 
     autocompleteSearch = (q) => {
-        const url = window.location.href + 'api?q=' + q
-        console.log(`url: ${url}`)
-        const cached = this._autocompleteCache[url];
-        if (cached) {
-          return Promise.resolve(cached).then(results => {
-                this.setState({items: results});
-            });
-        }
-
-        this.waitingFor = q;
-        fetch(url)
-            .then(response => {
-            if (response.status === 200) {
-                if (q === this.waitingFor) {
-                    response.json()
-                    .then(results => {
-                        this.setState({items: results});
-                    })
-                }
+        if (typeof q === 'string' || q instanceof String) {
+            const url = window.location.href + 'api?q=' + q.toLowerCase()
+            // console.log(`url: ${url}`)
+            const cached = this._autocompleteCache[url];
+            if (cached) {
+            return Promise.resolve(cached).then(results => {
+                    this.setState({items: results});
+                });
             }
-        })
+
+            this.waitingFor = q;
+            fetch(url)
+                .then(response => {
+                if (response.status === 200) {
+                    if (q === this.waitingFor) {
+                        response.json()
+                        .then(results => {
+                            this.setState({items: results});
+                        })
+                    }
+                }
+            })
+        } else {
+            this.setState({items: [{nace: 'Vennligst skriv inn tekst i søkefeltet'}]})
+        }
     }
 
     itemToString = (item) => {
         const {nace} = this.state;
+        // hente tekst for kode fra map i item2tekst.json
+        // console.log('item: ', item)
         const entry = nace.filter(function(o) {
             return o.nace === item.nace;
         });

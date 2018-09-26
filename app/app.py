@@ -45,8 +45,12 @@ def isAlive():
 def api():
     if 'q' in request.args:
         query = request.args['q']
+        if not isinstance(query, str):
+            return
+        if len(query) < 3:
+            return
     else:
-        return "Feil: ingen tekst sent."
+        return
 
     if model is None:      
         load_fasttext_model()
