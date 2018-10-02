@@ -101,12 +101,17 @@ export default class Search extends React.Component {
                     }) => (
                        <div>
                         <label {...getLabelProps()}></label>
-                        <input {...getInputProps(
+                        <textarea {...getInputProps(
                         {
                             style: {
-                            fontSize: '1.2em',   
+                            fontSize: '0.9em', 
+                            height: 160,
+                            verticalAlign: 'middle',
+                            width: '80%',
                             },
-                        })} />
+                        })} 
+                        placeholder='Skriv eller lim inn en beskrivelse av aktiviteten for å få forslag til næringskode'
+                        />
                         <ul {...getMenuProps()}>
                             {isOpen
                             ? items
