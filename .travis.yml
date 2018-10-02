@@ -12,6 +12,7 @@ env:
   global:
   - PROJECT_NAME=nav-datalab
   - IMAGE_NAME=ai-lab-nace-poc
+  - NAMESPACE=ai-lab
   - DEPLOYMENT_NAME=deployment/ai-lab-nace-poc
   - CLUSTER_NAME=ai-lab-nace-poc-cluster
   - RELEASE_VERSION=$(git rev-list --count master)
@@ -47,4 +48,4 @@ jobs:
     script:
     # Update container image in cluster
     - gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${ZONE_TAG}
-    - kubectl set image ${DEPLOYMENT_NAME} ${IMAGE_NAME}=gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${RELEASE_VERSION}
+    - kubectl set image ${DEPLOYMENT_NAME} ${IMAGE_NAME}=gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${RELEASE_VERSION} --namespace ${NAMESPACE}
