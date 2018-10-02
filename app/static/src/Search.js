@@ -37,7 +37,7 @@ export default class Search extends React.Component {
     autocompleteSearch = (q) => {
         if (typeof q === 'string' || q instanceof String) {
             const url = window.location.href + 'api?q=' + q.toLowerCase()
-            // console.log(`url: ${url}`)
+            //console.log(`url: ${url}`)
             const cached = this._autocompleteCache[url];
             if (cached) {
             return Promise.resolve(cached).then(results => {
@@ -70,7 +70,7 @@ export default class Search extends React.Component {
             return o.nace === item.nace;
         });
 
-        if (entry.length === 0 || !('tekst' in entry[0]) ) {
+        if (entry.length == 0 || !('tekst' in entry[0]) ) {
             return item.nace
         }
    
