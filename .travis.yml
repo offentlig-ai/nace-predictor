@@ -15,7 +15,9 @@ env:
   - NAMESPACE=ai-lab
   - DEPLOYMENT_NAME=deployment/ai-lab-nace-poc
   - CLUSTER_NAME=ai-lab-nace-poc-cluster
-  - RELEASE_VERSION=$(git rev-list --count master)
+  - DATE=$(date +%Y-%m-%d)
+  - GIT_HASH=$(git rev-parse --short HEAD)
+  - IMAGE_TAG=${DATE}-${GIT_HASH}
   - SERVICE_ACCOUNT=travis-ci@${PROJECT_NAME}.iam.gserviceaccount.com
   - ZONE_TAG=us-central1-a
 
@@ -41,11 +43,11 @@ jobs:
     # Build and tag docker image
     - docker build -t ${IMAGE_NAME} -f Dockerfile.travis .
     - docker images
-    - docker tag ${IMAGE_NAME} gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${RELEASE_VERSION}
+    - docker tag ${IMAGE_NAME} gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
     # Push docker image to gcloud storage
-    - gcloud docker -- push gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${RELEASE_VERSION}
+    - gcloud docker -- push gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${IMAGE_TAG}
   - stage: deploy docker image to gcloud VM instance
     script:
     # Update container image in cluster
     - gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${ZONE_TAG}
-    - kubectl set image ${DEPLOYMENT_NAME} ${IMAGE_NAME}=gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${RELEASE_VERSION} --namespace ${NAMESPACE}
+    - kubectl set image ${DEPLOYMENT_NAME} ${IMAGE_NAME}=gcr.io/${PROJECT_NAME}/${IMAGE_NAME}:${IMAGE_TAG} --namespace ${NAMESPACE}

@@ -1,12 +1,18 @@
 #!/usr/bin/env groovy
 
+import java.text.*
+
 node {
     def app
+    def yaml_path
+    def version_tag
 
     def app_name = 'ai-lab-nace-poc'
     def namespace = 'ai-lab-nace-poc'
     def cluster = 'oera-q.local'
-    def yaml_path = "https://repo.adeo.no/repository/raw/nais/${app_name}/${env.BUILD_ID}/nais.yaml"
+
+    def date = new Date()
+    def datestring = new SimpleDateFormat("yyyy-MM-dd").format(date);
 
     try {
         stage('Clean workspace') {
@@ -15,6 +21,8 @@ node {
 
         stage('Checkout code') {
             checkout scm
+            def git_commit_hash = sh (script: "git rev-parse --short HEAD", returnStdout: true)
+            version_tag = "${datestring}-${git_commit_hash}"
         }
 
         stage('Copy certificate bundle and aws credentials') {
@@ -32,6 +40,7 @@ node {
         }
 
         stage('Upload nais.yaml to nexus server') {
+            yaml_path = "https://repo.adeo.no/repository/raw/nais/${app_name}/${version_tag}/nais.yaml"
             sh "curl -s -S --upload-file nais.yaml ${yaml_path}"
         }
 
@@ -42,7 +51,7 @@ node {
         }
 
         stage('Deploy app to nais') {
-            sh "curl --fail -k -d '{\"application\": \"${app_name}\", \"version\": \"${env.BUILD_ID}\", \"skipFasit\": true, \"namespace\": \"${namespace}\", \"manifesturl\": \"${yaml_path}\"}' https://daemon.nais.${cluster}/deploy"
+            sh "curl --fail -k -d '{\"application\": \"${app_name}\", \"version\": \"${version_tag}\", \"skipFasit\": true, \"namespace\": \"${namespace}\", \"manifesturl\": \"${yaml_path}\"}' https://daemon.nais.${cluster}/deploy"
         }
     } catch(e) {
         echo "Build failed"
