@@ -21,7 +21,7 @@ node {
 
         stage('Checkout code') {
             checkout scm
-            def git_commit_hash = sh (script: "git rev-parse --short HEAD", returnStdout: true)
+            def git_commit_hash = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
             version_tag = "${datestring}-${git_commit_hash}"
         }
 
@@ -46,7 +46,7 @@ node {
 
         stage('Push docker image') {
             docker.withRegistry('https://repo.adeo.no:5443', 'nexus-credentials') {
-                app.push("${env.BUILD_ID}")
+                app.push("${version_tag}")
             }
         }
 
