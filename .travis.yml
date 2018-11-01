@@ -19,7 +19,7 @@ env:
   - GIT_HASH=$(git rev-parse --short HEAD)
   - IMAGE_TAG=${DATE}-${GIT_HASH}
   - SERVICE_ACCOUNT=travis-ci@${PROJECT_NAME}.iam.gserviceaccount.com
-  - ZONE_TAG=us-central1-a
+  - ZONE_TAG=europe-north1-a
 
 before_install:
   # Download and unpack gcloud SDK if not already cached
