@@ -5,7 +5,7 @@ An overview of the target solution architecture is [here](https://brreg.github.i
 ## The model
 The model is developed over at <https://github.com/offentlig-ai/nace-notebooks> and is made available to the API.
 ## The API
-The API is implemented in Python <http://flask.pocoo.org/> and a specification will be made available. Currently the API is avaiable at <http://35.228.204.120/api>. Example of usage:
+The API is implemented in Python (<http://flask.pocoo.org/>) and a specification will be made available. Currently the API is available at <http://35.228.204.120/api>. Example of usage:
 ```
 curl -H "Accept: application/json" "http://35.228.204.120/api?q=Skogsdrift"
 ```
