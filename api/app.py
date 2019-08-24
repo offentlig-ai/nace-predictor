@@ -1,5 +1,5 @@
 import flask
-from flask import Flask, Response, render_template, request, send_from_directory, url_for
+from flask import Flask, Response, render_template, request, send_from_directory, url_for, abort
 from flask_cors import CORS
 import fasttext
 from fasttext import load_model
@@ -41,26 +41,27 @@ def api():
     if 'q' in request.args:
         query = request.args['q']
         if not isinstance(query, str):
-            return
+            abort(406)
         if len(query) < 3:
-            return
+            abort (406)
     else:
         return
 
     if model is None:
         load_fasttext_model()
-
-    result = []
     #result = model.predict(query, k=5)
-    labels = ['barracuda','cod','devil ray','eel']
+
+    # Making a mock result, since we have no model at the moment:
+    result = []
+    labels = ['00.000','01.110','01.210','01.220']
     probabilities = [1, 0.75, 0.5, 0.25, 0.1]
     result.append(labels)
     result.append(probabilities)
-    
+
     ret = []
     for i, pred in enumerate(result[0]):
         ret.append({'nace':pred.replace('__label__','').replace('"',''),'value':str(result[1][i])})
-    return json.dumps(ret)
+    return Response(json.dumps(ret), mimetype='application/json')
 
 
 if __name__ == '__main__':
