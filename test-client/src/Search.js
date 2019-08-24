@@ -2,6 +2,8 @@ import React from 'react'
 import Downshift from 'downshift'
 import { throttle, debounce } from "throttle-debounce"
 
+const nace = require('./item2tekst.json')
+
 export default class Search extends React.Component {
     constructor(props) {
         super(props);
@@ -15,11 +17,6 @@ export default class Search extends React.Component {
 
     _autocompleteCache = {};
 
-    componentWillMount() {
-        import('./item2tekst.json').then(
-          res => this.setState({ nace: res })
-        );
-    }
 
     onChange = (selection) => {
         console.log(`You selected ${selection.value}`)
@@ -37,7 +34,7 @@ export default class Search extends React.Component {
     autocompleteSearch = (q) => {
         if (typeof q === 'string' || q instanceof String) {
             //const url = window.location.href + 'api?q=' + q.toLowerCase()
-            const url = 'http://localhost:8081/api?q=' + q.toLowerCase()
+            const url = 'http://localhost:8081/api?q=' + q.toLowerCase() // TODO url must be given by environment
             console.log(`url: ${url}`)
             const cached = this._autocompleteCache[url];
             if (cached) {
@@ -51,10 +48,18 @@ export default class Search extends React.Component {
                 .then(response => {
                 if (response.status === 200) {
                     if (q === this.waitingFor) {
-                        response.json()
-                        .then(results => {
-                            this.setState({items: results});
-                        })
+                        console.log('Content type', response.headers.get("content-type"))
+                        const contentType = response.headers.get("content-type");
+                        if (contentType && contentType.indexOf("application/json") !== -1) {
+                          response.json()
+                            .then(results => {
+                                this.setState({items: results});
+                          });
+                        } else {
+                          return response.text().then(text => {
+                            console.log('Search response', text)
+                          });
+                        }
                     }
                 }
             })
@@ -64,9 +69,7 @@ export default class Search extends React.Component {
     }
 
     itemToString = (item) => {
-        const {nace} = this.state;
-        // hente tekst for kode fra map i item2tekst.json
-        // console.log('item: ', item)
+        console.log('item to string: ', item)
         const entry = nace.filter(function(o) {
             return o.nace === item.nace;
         });
@@ -74,9 +77,7 @@ export default class Search extends React.Component {
         if (entry.length === 0 || !('tekst' in entry[0]) ) {
             return item.nace
         }
-
         return item.nace + ': ' + entry[0].tekst;
-
     }
 
     render() {
@@ -86,9 +87,9 @@ export default class Search extends React.Component {
         return (
             <div>
                 <Downshift
-                    onChange={selection => this.onChange(selection)}
                     onInputValueChange={(inputValue) => this.onInputValueChange(inputValue)}
-                    itemToString={item => (item ? item.pred + ' ' + item.value : '')}
+                    onChange = {selection => this.onChange(selection)}
+                    itemToString={item => (item ? this.itemToString(item) + ' -> ' + item.value : '')}
                     >
                     {({
                         getInputProps,
