@@ -34,7 +34,8 @@ export default class Search extends React.Component {
     autocompleteSearch = (q) => {
         if (typeof q === 'string' || q instanceof String) {
             //const url = window.location.href + 'api?q=' + q.toLowerCase()
-            const url = 'http://localhost:8081/api?q=' + q.toLowerCase() // TODO url must be given by environment
+            //const url = 'http://localhost:8081/api?q=' + q.toLowerCase() // TODO url must be given by environment
+            const url = process.env.REACT_APP_API_URL +  '/api?q=' + q.toLowerCase()
             console.log(`url: ${url}`)
             const cached = this._autocompleteCache[url];
             if (cached) {

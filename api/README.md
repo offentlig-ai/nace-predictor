@@ -21,5 +21,5 @@ To build and run the api in a Docker container:
 
 ```
 docker build -t offentlig-ai/nace-predictor-api:latest .
-docker run -p 8081:3000 -d offentlig-ai/nace-predictor-api:latest
+docker run -p 8081:8081 -d offentlig-ai/nace-predictor-api:latest
 ```
