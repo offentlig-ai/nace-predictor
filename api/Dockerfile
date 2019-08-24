@@ -1,7 +1,9 @@
-FROM python:3-alpine
+FROM python:3
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
+
+RUN pip3 install pybind11
 
 COPY requirements.txt /usr/src/app/
 

@@ -20,6 +20,6 @@ python3 -m app
 To build and run the api in a Docker container:
 
 ```
-docker build -t offentlig-ai/api:latest .
-docker run -p 8081:3000 -d offentlig-ai/api:latest
+docker build -t offentlig-ai/nace-predictor-api:latest .
+docker run -p 8081:3000 -d offentlig-ai/nace-predictor-api:latest
 ```
