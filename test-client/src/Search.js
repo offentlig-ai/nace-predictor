@@ -5,7 +5,7 @@ import { throttle, debounce } from "throttle-debounce"
 export default class Search extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             items: [],
             nace: []
         };
@@ -29,15 +29,16 @@ export default class Search extends React.Component {
       console.log(`Input value ${inputValue}`)
       if (inputValue.length < 5 || inputValue.endsWith(' ')) {
         this.autocompleteSearchThrottled(inputValue);
-      } else { 
+      } else {
         this.autocompleteSearchDebounced(inputValue);
       }
     }
 
     autocompleteSearch = (q) => {
         if (typeof q === 'string' || q instanceof String) {
-            const url = window.location.href + 'api?q=' + q.toLowerCase()
-            //console.log(`url: ${url}`)
+            //const url = window.location.href + 'api?q=' + q.toLowerCase()
+            const url = 'http://localhost:8081/api?q=' + q.toLowerCase()
+            console.log(`url: ${url}`)
             const cached = this._autocompleteCache[url];
             if (cached) {
             return Promise.resolve(cached).then(results => {
@@ -73,9 +74,9 @@ export default class Search extends React.Component {
         if (entry.length === 0 || !('tekst' in entry[0]) ) {
             return item.nace
         }
-   
+
         return item.nace + ': ' + entry[0].tekst;
-  
+
     }
 
     render() {
@@ -104,12 +105,12 @@ export default class Search extends React.Component {
                         <textarea {...getInputProps(
                         {
                             style: {
-                            fontSize: '0.9em', 
+                            fontSize: '0.9em',
                             height: 160,
                             verticalAlign: 'middle',
                             width: '80%',
                             },
-                        })} 
+                        })}
                         placeholder='Skriv eller lim inn en beskrivelse av aktiviteten for å få forslag til næringskode'
                         />
                         <ul {...getMenuProps()}>
@@ -123,7 +124,7 @@ export default class Search extends React.Component {
                                         item,
                                         style: {
                                         listStyleType: 'none',
-                                        fontSize: '1.2em',   
+                                        fontSize: '1.2em',
                                         backgroundColor:
                                             highlightedIndex === index ? 'darkgray' : 'black',
                                         fontWeight: selectedItem === item ? 'bold' : 'normal',
@@ -141,4 +142,3 @@ export default class Search extends React.Component {
                 </div>
         )}
 }
-

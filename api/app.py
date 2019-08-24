@@ -1,8 +1,8 @@
 import flask
 from flask import Flask, Response, render_template, request, send_from_directory, url_for
 from flask_cors import CORS
-import fastText
-from fastText import load_model
+import fasttext
+from fasttext import load_model
 import json
 import sys
 import os
@@ -24,11 +24,6 @@ def load_fasttext_model():
         print(f'Value error {e}')
     except:
         print(f'Unexpected error: {sys.exc_info()[0]}')
-  
-
-@app.route('/', methods=['GET', 'POST'])
-def react():
-    return render_template('index.html')
 
 
 @app.route('/isReady', methods=['GET'])
@@ -52,10 +47,16 @@ def api():
     else:
         return
 
-    if model is None:      
+    if model is None:
         load_fasttext_model()
 
-    result = model.predict(query, k=5)
+    result = []
+    #result = model.predict(query, k=5)
+    labels = ['barracuda','cod','devil ray','eel']
+    probabilities = [1, 0.75, 0.5, 0.25, 0.1]
+    result.append(labels)
+    result.append(probabilities)
+    
     ret = []
     for i, pred in enumerate(result[0]):
         ret.append({'nace':pred.replace('__label__','').replace('"',''),'value':str(result[1][i])})
@@ -64,5 +65,4 @@ def api():
 
 if __name__ == '__main__':
     load_fasttext_model()
-    app.run(host='0.0.0.0', port=80, debug=True)
-
+    app.run(host='0.0.0.0', port=8081, debug=True)
