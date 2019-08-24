@@ -23,3 +23,15 @@ We have made a simple [test client](./test-client) in React.
 Screenshot: ![alt text](screenshot.png "Title")
 
 For the time beeing the client is made avaialable here: [A simple test client](http://35.228.204.120/)
+
+## Try it out with Docker locally
+
+```
+git clone https://github.com/offentlig-ai/nace-predictor.git
+cd nace-predictor
+docker build -t offentlig-ai/nace-predictor-api:latest ./api/.
+docker build -t offentlig-ai/nace-predictor-test-client:latest ./test-client/.
+docker-compose up
+```
+
+Then point your browser to <http://localhost:8080>
