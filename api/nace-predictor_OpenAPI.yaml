@@ -1,0 +1,51 @@
+openapi: 3.0.2
+info:
+  title: NACE-predictor API
+  description: Exposes a ML-model that returns best match NACE-code based on various input
+  version: '1.0'
+  contact:
+    name: Brønnøysundregistrene
+    url: 'https://brreg.no'
+    email: info@brreg.no
+  license:
+    name: License of API
+    url: 'http://data.norge.no/nlod/no/2.0'
+externalDocs:
+  description: Dokumentasjon på Offentlig AI GitHub
+  url: https://github.com/offentlig-ai/nace-predictor/tree/master/api
+tags:
+  - name: nace-predictor
+    description: nace-predictor operations
+paths:
+  /api:
+    get:
+      tags:
+        - nace-predcitor
+      summary: A simple query that returns a list of predictions based on the query string
+      parameters:
+      - name: q
+        in: query
+        description: the query string. Must contain more than 2 characters
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Prediction"
+components:
+  schemas:
+    Prediction:
+        type: object
+        properties:
+          nace:
+            type: string
+            description: The nace kode the model predicts based on input text
+          value:
+            type: string
+            description: The probability of the prediction
