@@ -1,12 +1,19 @@
 # The API
 
+## To work in a virtual environment
+
+```
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
 ## Install and run locally
 
 ```
-pip3 install --user --no-cache-dir -r requirements.txt
+pip install --no-cache-dir -r requirements.txt
 python3 -m app
 # In another terminal:
-curl -H "Accep: application/json" "http://localahost:8081/api?q=lakseoppdrett"
+curl -H "Accept: application/json" "http://localhost:8081/api?q=lakseoppdrett"
 ```
 
 ## Docker

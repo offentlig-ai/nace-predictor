@@ -1,3 +1,4 @@
 - [ ] Integrate model into api to make it a real service
 - [ ] Add tests to api
 - [ ] Add tests to test-client
+- [ ] Fix content-negoation in api
