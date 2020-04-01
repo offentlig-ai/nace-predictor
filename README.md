@@ -35,3 +35,7 @@ docker-compose up
 ```
 
 Then point your browser to <http://localhost:8080>
+
+## Further work
+
+Some further work based on this application has been done [here](https://github.com/datautvikling/nace-predictor).
