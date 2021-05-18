@@ -1,3 +1,10 @@
+
+# Further work
+
+Some further work based on this application has been done [here](https://github.com/datautvikling/nace-predictor).
+
+This repository has therefore been archived.
+
 # Determine NACE-codes based on the description of the enterprise
 
 This repository exposes an ML-model as a service that predicts NACE-codes based on various datasets. There is also a simple client GUI (React) you can use to play with the service.
@@ -35,7 +42,3 @@ docker-compose up
 ```
 
 Then point your browser to <http://localhost:8080>
-
-## Further work
-
-Some further work based on this application has been done [here](https://github.com/datautvikling/nace-predictor).
